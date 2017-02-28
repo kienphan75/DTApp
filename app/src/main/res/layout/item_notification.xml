@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:foregroundGravity="center_vertical"
+        android:background="@mipmap/ic_launcher"
+        android:id="@+id/notication_avatar"
+        />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_toRightOf="@+id/notication_avatar"
+        android:gravity="center_vertical"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:maxLines="3"
+            android:text="Phạm Ngọc Hải đã đăng D13 D14 D15"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:ellipsize="end"
+            android:id="@+id/notication_message"
+
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/notication_message"
+            android:id="@+id/notication_icon"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:id="@+id/notication_time"
+            android:layout_below="@id/notication_message"
+            android:layout_toRightOf="@id/notication_icon"
+            android:text="5 giờ trước"
+            />
+    </RelativeLayout>
+</RelativeLayout>

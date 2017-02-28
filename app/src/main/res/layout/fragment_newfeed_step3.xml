@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp">
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/motaCLS"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:fontFamily="sans-serif-light"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/ed3"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="10"
+        android:minLines="5"
+        android:gravity="top|left"
+        android:maxLines="15"
+        android:hint="Please Edit"/>
+
+</LinearLayout>

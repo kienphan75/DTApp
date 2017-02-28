@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_load_image"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/liiiii"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.example.nam.dtapp.model.CustomViewPager
+            android:id="@+id/pagerPost"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            </com.example.nam.dtapp.model.CustomViewPager>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1.0px"
+            android:layout_above="@+id/buttons"
+            android:layout_marginTop="10dp"
+            android:background="?android:dividerHorizontal" />
+
+        <LinearLayout
+            android:layout_above="@+id/liiiii"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btnprevious"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?android:selectableItemBackground"
+                    android:text="PREVIOUS" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="1.0px"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/buttons"
+                android:layout_marginTop="10dp"
+                android:background="?android:dividerHorizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btnnext"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?android:selectableItemBackground"
+                    android:text="NEXT" />
+            </LinearLayout>
+        </LinearLayout>
+
+</LinearLayout>

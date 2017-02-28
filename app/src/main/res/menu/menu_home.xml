@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_search"
+        android:title="@string/app_name"
+        android:hint="Search"
+        android:icon="@drawable/ic_search_white_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/library_icon"
+        android:icon="@drawable/ic_star_white_24dp"
+        android:title=""
+        app:showAsAction="always">
+
+    </item>
+    <item
+        android:id="@+id/notication_icon"
+        android:title=""
+        app:showAsAction="always"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        >
+    </item>
+    <item
+        android:id="@+id/setting_icon"
+        android:title=""
+        app:showAsAction="always"
+        android:icon="@drawable/ic_more_vert_black_24dp"
+        >
+        <menu>
+            <item
+                android:id="@+id/profile_icon"
+                android:title="PROFILE"
+                app:showAsAction="ifRoom"
+                >
+            </item>
+        </menu>
+    </item>
+</menu>

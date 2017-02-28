@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:layout_width="100dp"
+            android:background="@drawable/photo"
+            android:id="@+id/updateprofile_avatar"
+            android:layout_height="100dp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="wrap_content"
+                android:text="YOUR NAME"
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
+                android:id="@+id/updateprofile_name"
+                android:layout_height="wrap_content" />
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_below="@id/updateprofile_name"
+                android:id="@+id/updateprofile_object"
+                android:layout_height="wrap_content"></Spinner>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:paddingTop="10dp"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_workplace"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hint_phone"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:inputType="phone"
+        android:layout_gravity="center_horizontal" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+        <Button
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal"
+            android:text="UPDATE" />
+    </RelativeLayout>
+</LinearLayout>

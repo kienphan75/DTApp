@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DTApp</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_repassword">Nhập lại Password</string>
+    <string name="hint_name">Họ tên</string>
+    <string name="hint_workplace">Nơi làm việc</string>
+    <string name="hint_phone">SĐT</string>
+    <string name="hint_mainfield">Chuyên khoa</string>
+    <string name="hint_concernfield">Chuyên khoa quan tâm</string>
+    <string name="hint_avatar">Ảnh đại diện</string>
+    <string name="hint_type">Công việc</string>
+
+
+    <string name="btn_link_to_register">Not a member? Sign up now.</string>
+    <string name="btn_link_to_login">Already registred! Login Me.</string>
+    <string name="welcome">Welcome</string>
+
+    <string name="btn_login">LOGIN</string>
+    <string name="btn_logout">LOGOUT</string>
+    <string name="btn_register">REGISTER</string>
+
+    <string name="name">Fullname</string>
+</resources>
