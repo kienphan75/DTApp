@@ -33,6 +33,8 @@ import com.example.nam.dtapp.view.fragment.NewFeedFragment;
 import com.example.nam.dtapp.view.fragment.NotifcationFragment;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -45,14 +47,18 @@ public class HomeActivity extends ActionBarActivity implements
     Toolbar toolbar;
     @BindView(R.id.tab)
     SmartTabLayout smartTabLayout;
-    Status status;
     Case aCase;
+    ArrayList<Case> listCase= new ArrayList<>();
     HomeVPAdapter.HomePagerAdapter adapter;
     Fragment FRAGMENT_CONTRUCT[] = {
             NewFeedFragment.getInstance(),
             NewFeedFragment.getInstance(),
             NotifcationFragment.getInstance()
     };
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,21 +68,9 @@ public class HomeActivity extends ActionBarActivity implements
         saveSizeScreen();
 
 
+
         Intent intent = getIntent();
-
-
-//        status = intent.getParcelableExtra("parcelable");
         aCase=intent.getParcelableExtra("doituong");
-
-
-//        if (status != null){
-//            Toast.makeText(getBaseContext(),status.getAvatr()+status.getName(),Toast.LENGTH_SHORT).show();
-//            Bundle bundle = new Bundle();
-//            bundle.putParcelable("data", status);
-//            FRAGMENT_CONTRUCT[0].setArguments(bundle);
-//            adapter.notifyDataSetChanged();
-//        }
-
         if (aCase != null){
             Bundle bundle = new Bundle();
             bundle.putParcelable("dataCase", aCase);

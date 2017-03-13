@@ -32,7 +32,9 @@ import com.example.nam.dtapp.model.CustomViewPager;
 
 import com.example.nam.dtapp.model.Status;
 import com.example.nam.dtapp.model.User;
+import com.example.nam.dtapp.model.UserFriend;
 import com.example.nam.dtapp.model.modelAPI.AddNewCase;
+import com.example.nam.dtapp.model.modelAPI.GetFriendList;
 import com.example.nam.dtapp.model.modelAPI.Login;
 import com.example.nam.dtapp.model.modelAPI.UploadImage;
 import com.example.nam.dtapp.service.API;
@@ -47,6 +49,7 @@ import com.example.nam.dtapp.view.fragment.Fragment_Newfeed_step3;
 import com.example.nam.dtapp.view.fragment.NewFeedFragment;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -89,12 +92,17 @@ public class UpLoadActivity extends AppCompatActivity implements View.OnClickLis
     Case aC = new Case();
     ProgressDialog progressDialog;
     ArrayList<String> DS = new ArrayList<>();
+    private ArrayList<User> listFriend = new ArrayList<>();
+    ArrayList<String> listFriendname = new ArrayList<>();
+    ArrayList<User> Friends = new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upnewfeed);
+        progressDialog = new ProgressDialog(UpLoadActivity.this);
+        progressDialog.setCanceledOnTouchOutside(false);
         viewPager = (CustomViewPager) findViewById(R.id.pagerPost);
         btnnext = (Button) findViewById(R.id.btnnext);
         btnprevious = (Button) findViewById(R.id.btnprevious);
@@ -104,8 +112,18 @@ public class UpLoadActivity extends AppCompatActivity implements View.OnClickLis
         progressDialog.setCanceledOnTouchOutside(false);
         btnnext.setOnClickListener(this);
         btnprevious.setOnClickListener(this);
+        new TaskGetListFrend().execute();
+
+
+    }
+
+    private void init() {
         fr1 = new Fragment_Newfeed_step1();
         fr2 = new Fragment_Newfeed_step2();
+        Bundle bundle = new Bundle();
+        bundle.putStringArrayList("listNameFriend", listFriendname);
+        fr2.setArguments(bundle);
+
         fr3 = new Fragment_Newfeed_step3();
         listfragment.add(fr1);
         listfragment.add(fr2);
@@ -115,8 +133,6 @@ public class UpLoadActivity extends AppCompatActivity implements View.OnClickLis
         viewPager.setPagingEnabled(false);
         btnnext.setEnabled(false);
         btnprevious.setText("");
-
-
     }
 
     @Override
@@ -141,18 +157,9 @@ public class UpLoadActivity extends AppCompatActivity implements View.OnClickLis
                         }
                         break;
                     case 1:
-                        String s1 = fr2.getEd1().getText().toString();
-                        String s2 = fr2.getEd2().getText().toString();
-                        if (s1 != "" && s1.length() > 5) {
-                            Toast.makeText(getBaseContext(), s1, Toast.LENGTH_SHORT).show();
-                            status.setName(s1);
-                            status.setCt_status(s2);
-
-
-                            vitri++;
-                            viewPager.setCurrentItem(vitri);
-                            btnnext.setText("UPLOAD");
-                        }
+                        vitri++;
+                        viewPager.setCurrentItem(vitri);
+                        btnnext.setText("UPLOAD");
                         break;
                     case 2:
                         progressDialog.show();
@@ -160,14 +167,25 @@ public class UpLoadActivity extends AppCompatActivity implements View.OnClickLis
                         aC.setTitle(fr2.getEd1().getText().toString());
                         aC.setDescription(fr3.getEd().getText().toString());
                         aC.setCreateDate(getTimeSystem());
-                        aC.setTagFriends(null);
+
+                        String s2 = fr2.getEd2().getText().toString();
+                        listFriendname = TachDanhSachBan(s2);
+                        for (int i = 0; i < listFriendname.size(); i++) {
+                            if (checkFriend(listFriendname.get(i)) != null) {
+                                Friends.add(checkFriend(listFriendname.get(i)));
+                            }
+
+                        }
+                        Log.e(TAG_NAME, "DSFRIEND : " + Friends.size());
+
+
+                        aC.setTagFriends(Friends);
                         aC.setTotalUserFollowing(0);
                         aC.setUsersFollowings(null);
                         aC.setCommentNumber(0);
                         aC.setStartComments(null);
                         TaskLoadImage taskLoadImage = new TaskLoadImage();
                         taskLoadImage.execute();
-
                         break;
                 }
                 break;
@@ -266,7 +284,6 @@ public class UpLoadActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         protected Integer doInBackground(Void... cases) {
 
-
             final Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(API.BASE_URL)
                     .addConverterFactory(ScalarsConverterFactory.create())
@@ -350,6 +367,84 @@ public class UpLoadActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    private class TaskGetListFrend extends AsyncTask<Void, Void, ArrayList<UserFriend>> {
+
+        @Override
+        protected ArrayList<UserFriend> doInBackground(Void... integers) {
+            final Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(API.BASE_URL)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            final API getFriend = retrofit.create(API.class);
+            Log.e(TAG_NAME, "USERIDFRIEND : " + Config.USER_ID);
+            GetFriendList getFriendList = new GetFriendList(Config.APP_KEY, Config.FOR_TEST, Config.USER_ID);
+
+
+            Call<String> call = getFriend.getFriendList(getFriendList);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    try {
+                        JSONObject json = new JSONObject(Utils.convertJson(response.body()));
+                        Log.e(TAG_NAME, json.toString());
+                        int code = json.getInt("errCode");
+                        Log.e(TAG_NAME, "code friend : " + code + "");
+                        if (code == 200) {
+                            progressDialog.dismiss();
+                            Log.e(TAG_NAME, "DATA friend: " + json.getString("Data"));
+                            JSONArray data = json.getJSONArray("Data");
+                            Log.e(TAG_NAME, "Sizzz : " + data.length());
+
+                            Log.e(TAG_NAME, "Sizzz : " + listFriend.size());
+                            for (int i = 0; i < data.length(); i++) {
+                                JSONObject object = (JSONObject) data.get(i);
+                                User userFriend = new User();
+                                userFriend.setUserId(object.getInt("UserId"));
+                                userFriend.setEmail(object.getString("Email"));
+                                userFriend.setFullname(object.getString("Fullname"));
+                                listFriendname.add("#" + object.getString("Fullname"));
+                                userFriend.setAvatar(object.getString("Avatar"));
+                                listFriend.add(userFriend);
+                                Log.e(TAG_NAME, "UserId : " + userFriend.getUserId());
+                                Log.e(TAG_NAME, "Email : " + userFriend.getEmail());
+                                Log.e(TAG_NAME, "Avatar : " + userFriend.getAvatar());
+                                Log.e(TAG_NAME, "Fullname : " + userFriend.getFullname());
+                                Log.e(TAG_NAME, "Sizzz : " + listFriend.size());
+
+                            }
+                            init();
+
+
+                        } else {
+                            Log.e(TAG_NAME, "loi danh sach ban be");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.show();
+
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<UserFriend> strings) {
+            super.onPostExecute(strings);
+        }
+    }
+
     private String getTimeSystem() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat dateformat = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss aa");
@@ -357,39 +452,71 @@ public class UpLoadActivity extends AppCompatActivity implements View.OnClickLis
         return datetime;
     }
 
-    public static Bitmap getBitmap(String filePath) {
+//    public static Bitmap getBitmap(String filePath) {
+//
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inJustDecodeBounds = true;
+//        BitmapFactory.decodeFile(filePath, options);
+//
+//        Boolean scaleByHeight = Math.abs(options.outHeight - 100) >= Math
+//                .abs(options.outWidth - 100);
+//        if (options.outHeight * options.outWidth * 2 >= 16384) {
+//            double sampleSize = scaleByHeight
+//                    ? options.outHeight / 100
+//                    : options.outWidth / 100;
+//            options.inSampleSize =
+//                    (int) Math.pow(2d, Math.floor(
+//                            Math.log(sampleSize) / Math.log(2d)));
+//        }
+//        options.inJustDecodeBounds = false;
+//        options.inTempStorage = new byte[512];
+//        Bitmap output = BitmapFactory.decodeFile(filePath, options);
+//        return output;
+//    }
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, options);
 
-        Boolean scaleByHeight = Math.abs(options.outHeight - 100) >= Math
-                .abs(options.outWidth - 100);
-        if (options.outHeight * options.outWidth * 2 >= 16384) {
-            double sampleSize = scaleByHeight
-                    ? options.outHeight / 100
-                    : options.outWidth / 100;
-            options.inSampleSize =
-                    (int) Math.pow(2d, Math.floor(
-                            Math.log(sampleSize) / Math.log(2d)));
-        }
-        options.inJustDecodeBounds = false;
-        options.inTempStorage = new byte[512];
-        Bitmap output = BitmapFactory.decodeFile(filePath, options);
-        return output;
-    }
-
-
-    public static Bitmap getImageBitmapFromUrl(String imageFilePath)
-    {
+    public static Bitmap getImageBitmapFromUrl(String imageFilePath) {
         try {
             BitmapFactory.Options bmpFactoryOptions = new BitmapFactory.Options();
             Bitmap bmp = BitmapFactory.decodeFile(imageFilePath, bmpFactoryOptions);
-            return  bmp;
-        } catch (Exception e) {}
+            return bmp;
+        } catch (Exception e) {
+        }
 
         return null;
     }
 
 
+    private ArrayList<String> TachDanhSachBan(String s) {
+        ArrayList<String> list = new ArrayList<>();
+        Log.e(TAG_NAME, "Chuoi ban dau la : " + s);
+        String[] words = s.split("\\s");
+        for (int i = 0; i < words.length; i++) {
+            Log.e(TAG_NAME, "K************");
+            Log.e(TAG_NAME, "choi la :" + words[i]);
+            Log.e(TAG_NAME, "Do dai :" + words[i].length() + "");
+
+            Log.e(TAG_NAME, "Trim :" + words[i].trim());
+            Log.e(TAG_NAME, "Do dai sau Trim :" + words[i].trim().length());
+            try {
+                String s1 = words[i].trim().substring(1, (words[i].length() - 1));
+                Log.e(TAG_NAME, "S :" + s1);
+                Log.e(TAG_NAME, "Do dai sau cuoi :" + s1.length());
+                list.add(s1);
+            } catch (Exception e) {
+            }
+
+
+        }
+        return list;
+    }
+
+    private User checkFriend(String name) {
+        for (int i = 0; i < listFriend.size(); i++) {
+            if (listFriend.get(i).getFullname().equals(name)) {
+                return listFriend.get(i);
+            }
+        }
+        return null;
+    }
 }

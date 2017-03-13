@@ -46,14 +46,11 @@ public class NewFeedFragment extends Fragment {
     public static final String TAG_NAME = "NewFeedFragment";
     @BindView(R.id.rv_newfeed)
     RecyclerView mRecyclerView;
-    static Status newFeed;
-
     Case aCase;
 
 
 
     private HomeRVAdapter.NewFeedAdapter adapter;
-    private ArrayList<Status> listNewFeed= new ArrayList<>();
     private ArrayList<Case> listCase= new ArrayList<>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -71,22 +68,19 @@ public class NewFeedFragment extends Fragment {
                 .build();
 
         API loginAPI = retrofit.create(API.class);
-        final GetCasesList getCasesList = new GetCasesList(Config.APP_KEY, Config.FOR_TEST,10,3,3,4);
+        final GetCasesList getCasesList = new GetCasesList(Config.APP_KEY, Config.FOR_TEST,Config.USER_ID,2,0,0);
         Call<String> call = loginAPI.getCasesList(getCasesList);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
 
-                Log.v(TAG_NAME,"Login success: "+response.body());
-
                 try {
                     JSONObject json  = new JSONObject(response.body());
                     int code = json.getInt("errCode");
+                    Log.e(TAG_NAME,"Code getCaseList :"+code);
                     if (code==200){
                         JSONObject data = json.getJSONObject("Data");
-
-                        JSONArray array= data.getJSONArray("CaseList");
-                        Log.v(TAG_NAME,array.toString());
+                        Log.e(TAG_NAME,"Data getCaseList :"+data);
 
 
 //                        Case aCase= new Case();
@@ -161,21 +155,14 @@ public class NewFeedFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new HomeRVAdapter.NewFeedAdapter(getContext(), listCase);
-//        newFeed = getArguments().getParcelable("data");
         aCase= getArguments().getParcelable("dataCase");
         mRecyclerView.setAdapter(adapter);
-//        if(newFeed!=null){
-//            Toast.makeText(getActivity().getBaseContext(),"Them moi",Toast.LENGTH_SHORT).show();
-//            listNewFeed.add(newFeed);
-//            adapter.notifyDataSetChanged();
-////            mRecyclerView.invalidate();
-//        }
 
-        if(aCase!=null){
-            Toast.makeText(getActivity().getBaseContext(),"Them moi",Toast.LENGTH_SHORT).show();
-            listCase.add(aCase);
-            adapter.notifyDataSetChanged();
-        }
+//        if(aCase!=null){
+//            Toast.makeText(getActivity().getBaseContext(),"Them moi",Toast.LENGTH_SHORT).show();
+//            listCase.add(aCase);
+//            adapter.notifyDataSetChanged();
+//        }
 
         return v;
     }

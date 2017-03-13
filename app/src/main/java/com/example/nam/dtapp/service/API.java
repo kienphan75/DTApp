@@ -1,7 +1,9 @@
 package com.example.nam.dtapp.service;
 
+import com.example.nam.dtapp.model.Case;
 import com.example.nam.dtapp.model.modelAPI.AddNewCase;
 import com.example.nam.dtapp.model.modelAPI.GetCasesList;
+import com.example.nam.dtapp.model.modelAPI.GetFriendList;
 import com.example.nam.dtapp.model.modelAPI.GetUserNotification;
 import com.example.nam.dtapp.model.modelAPI.Login;
 import com.example.nam.dtapp.model.RegisterUser;
@@ -39,4 +41,7 @@ public interface API {
 
     @POST("AddNewCase")
     Call<String> addNewCase(@Body AddNewCase addNewCase);
+
+    @POST("GetFriendList")
+    Call<String> getFriendList(@Body GetFriendList getFriendList);
 }

@@ -1,12 +1,14 @@
 package com.example.nam.dtapp.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by NAM on 12/11/2016.
  */
 
-public class User {
+public class User implements Serializable{
+    private int userId;
     private String email;
     private String password;
     private String fullname;
@@ -21,6 +23,34 @@ public class User {
         this.mainFieldId = mainFieldId;
         this.fullname = fullname;
         this.email = email;
+    }
+
+    public User(int userId, String email, String fullname, String avatar) {
+        this.userId = userId;
+        this.email = email;
+        this.fullname = fullname;
+        this.avatar = avatar;
+    }
+
+    public User(int userId, String email, String password, String fullname, String workplace, String phone, int mainFieldId, ArrayList<Integer> concernFieldId, String avatar, int objectType) {
+        this.userId = userId;
+        this.email = email;
+        this.password = password;
+        this.fullname = fullname;
+        this.workplace = workplace;
+        this.phone = phone;
+        this.mainFieldId = mainFieldId;
+        this.concernFieldId = concernFieldId;
+        this.avatar = avatar;
+        this.objectType = objectType;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public User() {

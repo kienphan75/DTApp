@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nam.dtapp.R;
+import com.example.nam.dtapp.model.User;
 import com.example.nam.dtapp.view.activity.newfeed.UpLoadActivity;
 import com.volokh.danylo.hashtaghelper.HashTagHelper;
 
@@ -42,7 +43,7 @@ public class Fragment_Newfeed_step2 extends Fragment implements HashTagHelper.On
     private ArrayList<Integer> listFrends;
     private HashTagHelper mEditTextHashTagHelper;
     private HashTagHelper mTextViewHashTagHelper;
-    String [] listFriend =new String []{"#Hải","#Kiên","#Ngọc"};
+    ArrayList<String> listName= new ArrayList<>();
 
 
     public ArrayList<Integer> getListFrends() {
@@ -77,17 +78,23 @@ public class Fragment_Newfeed_step2 extends Fragment implements HashTagHelper.On
         this.ed2 = ed2;
     }
 
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_newfeed_step2, container, false);
+        listName =getArguments().getStringArrayList("listNameFriend");
+        Log.e(TAG,"listName : "+listName.size());
+        Log.e(TAG,"Name : "+listName.get(0));
+
         layout = (LinearLayout) v.findViewById(R.id.fragment_step2);
         ed1 = (EditText) v.findViewById(R.id.ed1);
         ed2 = (MultiAutoCompleteTextView) v.findViewById(R.id.ed2);
         spinner= (Spinner) v.findViewById(R.id.spinner_linhvucCLS);
         tvTag= (TextView) v.findViewById(R.id.tvTemp);
 
-        ed2.setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,listFriend));
+        ed2.setAdapter(new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,listName));
         ed2.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
         ed2.setThreshold(2);
         mEditTextHashTagHelper = HashTagHelper.Creator.create(getResources().getColor(R.color.colorPrimaryDark), null);
@@ -117,10 +124,7 @@ public class Fragment_Newfeed_step2 extends Fragment implements HashTagHelper.On
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, getJob());
         spinner.setAdapter(dataAdapter);
-        listFrends=new ArrayList<>();
-        listFrends.add(1);
-        listFrends.add(2);
-
+        listFrends= new ArrayList<>();
         return v;
     }
 
@@ -140,19 +144,24 @@ public class Fragment_Newfeed_step2 extends Fragment implements HashTagHelper.On
 
     @Override
     public void onHashTagClicked(String hashTag) {
-        Log.e(TAG,hashTag);
-        if(contain(hashTag)){
-            Toast.makeText(getActivity().getApplicationContext(),hashTag,Toast.LENGTH_SHORT).show();
+        Log.e(TAG,"click : "+hashTag);
+        if(contain(hashTag)!=-1){
+            listFrends.add(contain(hashTag));
+            Log.e(TAG,"click index : "+contain(hashTag));
+            Toast.makeText(getActivity().getApplicationContext(),"Tag người "+hashTag,Toast.LENGTH_SHORT).show();
         }
-        else
-            Toast.makeText(getActivity().getApplicationContext(),"Sai dữ liệu",Toast.LENGTH_SHORT).show();
+        else {
+            Toast.makeText(getActivity().getApplicationContext(), "Sai dữ liệu", Toast.LENGTH_SHORT).show();
+            Log.e(TAG,"click index 1: "+contain(hashTag));
+        }
     }
-    public boolean contain(String s){
-        for(String t:listFriend) {
-            Log.e(TAG,"ss: "+t+" "+"#" + s);
-            if (t.trim().compareTo(("#" + s).trim()) == 0)
-                return true;
+    public int contain(String s){
+        for(int i=0;i<listName.size();i++) {
+            Log.e(TAG,"ss: "+listName.get(i)+" "+"#" + s);
+            if (listName.get(i).trim().compareTo(("#" + s).trim()) == 0) {
+                return i;
+            }
         }
-        return false;
+        return -1;
     }
 }
